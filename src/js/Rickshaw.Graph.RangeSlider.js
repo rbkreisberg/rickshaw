@@ -30,6 +30,7 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 
 					graph.window.xMin = ui.values[0];
 					graph.window.xMax = ui.values[1];
+					if (graph.window.xMin >= graph.window.xMax) { graph.window.xMax = 1.01 * graph.window.xMin;}
 					graph.update();
 
 					// if we're at an extreme, stick there
