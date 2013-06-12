@@ -6,6 +6,8 @@ Rickshaw.Graph.Smoother = Rickshaw.Class.create({
 
 		this.graph = args.graph;
 		this.element = args.element;
+		this.max = args.max || 15;
+		this.step = args.step || 5;
 		this.aggregationScale = 1;
 
 		this.build();
@@ -25,7 +27,8 @@ Rickshaw.Graph.Smoother = Rickshaw.Class.create({
 			$( function() {
 				$(self.element).slider( {
 					min: 1,
-					max: 100,
+					max: 15,
+					step: 5,
 					slide: function( event, ui ) {
 						self.setScale(ui.value);
 						self.graph.update();
@@ -42,7 +45,6 @@ Rickshaw.Graph.Smoother = Rickshaw.Class.create({
 		}
 
 		this.aggregationScale = scale;
-		this.graph.update();
 	},
 
 	transformer: function(data) {
