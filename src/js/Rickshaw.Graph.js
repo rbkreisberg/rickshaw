@@ -111,10 +111,25 @@ Rickshaw.Graph = function(args) {
 			.range([0, this.height]);
 	};
 
+	this.setRange = function() {
+		var domain = this.renderer.domain();
+		domain.x = [this.window.xMin || domain.x[0], this.window.xMax || domain.x[1]];
+		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
+
+		this.x = d3.scale.linear().domain(domain.x).range([0,this.width]);
+
+		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
+
+		this.y.magnitude = d3.scale.linear()
+			.domain([domain.y[0] - domain.y[0], domain.y[1] - domain.y[0]])
+			.range([0, this.height]);
+	};
+
 	this.render = function() {
 
 		var stackedData = this.stackData();
-		this.discoverRange();
+		if (this.window.xMin || this.window.xMax) { this.setRange();}
+		else { this.discoverRange(); }
 
 		this.renderer.render();
 
@@ -128,8 +143,8 @@ Rickshaw.Graph = function(args) {
 	this.stackData = function() {
 
 		var data = this.series.active()
-			.map( function(d) { return d.data } )
-			.map( function(d) { return d.filter( function(d) { return this._slice(d) }, this ) }, this);
+			.map( function(d) { return d.data } );
+			//.map( function(d) { return d.filter( function(d) { return this._slice(d) }, this ) }, this);
 
 		var preserve = this.preserve;
 		if (!preserve) {
