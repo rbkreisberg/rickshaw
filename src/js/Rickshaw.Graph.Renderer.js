@@ -40,7 +40,8 @@ Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
 		var yMax = firstPoint.y + firstPoint.y0;
 
 		stackedData.forEach( function(series) {
-
+			if (series.length < 1) return;
+			
 			series.forEach( function(d) {
 
 				if (d.y == null) return;
