@@ -1,6 +1,6 @@
 .rickshaw_legend {
 	font-family: Arial;
-	font-size: 12px;
+	font-size: 14px;
 	color: white;
 	background: #404040;
 	display: inline-block;
@@ -41,16 +41,19 @@
 .rickshaw_legend .action:hover {
 	opacity: 0.6;
 }
+
 .rickshaw_legend .action {
+	color: #fff;
 	margin-right: 0.2em;
 	font-size: 10px;
-	opacity: 0.2;
 	cursor: pointer;
 	font-size: 14px;
 }
-.rickshaw_legend .line.disabled {
-	opacity: 0.4;
+
+.rickshaw_legend .line.disabled .action {
+	color: #404040;;
 }
+
 .rickshaw_legend ul {
 	list-style-type: none;
 	margin: 0;
