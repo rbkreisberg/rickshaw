@@ -33,6 +33,7 @@ JS_FILES=\
 	src/js/Rickshaw.Graph.JSONP.js\
 	src/js/Rickshaw.Graph.Legend.js\
 	src/js/Rickshaw.Graph.RangeSlider.js\
+	src/js/Rickshaw.Graph.YRangeSlider.js\
 	src/js/Rickshaw.Graph.Renderer.js\
 	src/js/Rickshaw.Graph.Renderer.Line.js\
 	src/js/Rickshaw.Graph.Renderer.Stack.js\

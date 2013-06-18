@@ -98,12 +98,17 @@ Rickshaw.Graph = function(args) {
 
 	};
 
+	this.yDomain = function() {
+		return this.renderer.domain().y;
+	};
+
 	this.discoverRange = function() {
-
 		var domain = this.renderer.domain();
-
 		this.x = d3.scale.linear().domain(domain.x).range([0, this.width]);
+	};
 
+	this.discoverYRange = function() {
+	var domain = this.renderer.domain();
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
 
 		this.y.magnitude = d3.scale.linear()
@@ -114,10 +119,12 @@ Rickshaw.Graph = function(args) {
 	this.setRange = function() {
 		var domain = this.renderer.domain();
 		domain.x = [this.window.xMin || domain.x[0], this.window.xMax || domain.x[1]];
-		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
-
 		this.x = d3.scale.linear().domain(domain.x).range([0,this.width]);
+	};
 
+	this.setYRange = function() {
+		var domain = this.renderer.domain();
+		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
 
 		this.y.magnitude = d3.scale.linear()
@@ -130,6 +137,9 @@ Rickshaw.Graph = function(args) {
 		var stackedData = this.stackData();
 		if (this.window.xMin || this.window.xMax) { this.setRange();}
 		else { this.discoverRange(); }
+
+		if (this.window.yMin || this.window.yMax) { this.setYRange();}
+		else { this.discoverYRange(); }
 
 		this.renderer.render();
 
