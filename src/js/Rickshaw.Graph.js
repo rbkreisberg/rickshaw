@@ -94,7 +94,8 @@ Rickshaw.Graph = function(args) {
 		// take from the first series
 		var data = this.series[0].data;
 
-		return [ data[0].x, data.slice(-1).shift().x ];
+		//return [ data[0].x, data.slice(-1).shift().x ];
+		return this.renderer.domain().x;
 
 	};
 
