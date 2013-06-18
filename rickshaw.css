@@ -111,11 +111,11 @@
 }
 .rickshaw_annotation_timeline .annotation {
 	position: absolute;
-	height: 6px;
-	width: 6px;
+	height: 16px;
+	width: 5px;
 	margin-left: -2px;
-	top: -3px;
-	border-radius: 5px;
+	top: -8px;
+	
 	background-color: rgba(0, 0, 0, 0.25);
 }
 .rickshaw_graph .annotation_line {
@@ -153,11 +153,12 @@
 	border-radius: 3px;
 	position: relative;
 	z-index: 20;
-	font-size: 12px;
+	font-size: 14px;
 	padding: 6px 8px 8px;
 	top: 18px;
 	left: -11px;
-	width: 160px;
+	max-width: 300px;
+	min-width: 160px;
 	display: none;
 	cursor: pointer;
 }
@@ -247,7 +248,7 @@
 }
 .rickshaw_legend {
 	font-family: Arial;
-	font-size: 12px;
+	font-size: 14px;
 	color: white;
 	background: #404040;
 	display: inline-block;
@@ -288,16 +289,19 @@
 .rickshaw_legend .action:hover {
 	opacity: 0.6;
 }
+
 .rickshaw_legend .action {
+	color: #fff;
 	margin-right: 0.2em;
 	font-size: 10px;
-	opacity: 0.2;
 	cursor: pointer;
 	font-size: 14px;
 }
-.rickshaw_legend .line.disabled {
-	opacity: 0.4;
+
+.rickshaw_legend .line.disabled .action {
+	color: #404040;;
 }
+
 .rickshaw_legend ul {
 	list-style-type: none;
 	margin: 0;
