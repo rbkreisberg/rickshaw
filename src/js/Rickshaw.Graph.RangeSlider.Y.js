@@ -1,6 +1,6 @@
-Rickshaw.namespace('Rickshaw.Graph.YRangeSlider');
+Rickshaw.namespace('Rickshaw.Graph.RangeSlider.Y');
 
-Rickshaw.Graph.YRangeSlider = Rickshaw.Class.create({
+Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
 
   initialize: function(args) {
 
