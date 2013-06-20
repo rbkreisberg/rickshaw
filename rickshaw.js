@@ -2191,7 +2191,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
     this.min = args.min || 0;
     this.max = args.max || 14;
     this.step = args.step || 0.2;
-    this.width = args.width || 200;
+    //this.width = args.width || 200;
 
     this.build();
 
@@ -2218,7 +2218,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
 
           graph.window.yMin = ui.values[0];
           graph.window.yMax = ui.values[1];
-          if (graph.window.yMin >= graph.window.yMax) { graph.window.yMax = 1.01 * graph.window.yMin;}
+          if (graph.window.yMin + self.step >= graph.window.yMax) { graph.window.yMax = self.step  + graph.window.yMin;}
           graph.update();
 
           // if we're at an extreme, stick there
@@ -2231,8 +2231,6 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
         }
       } );
     } );
-
-    element[0].style.width = this.width + 'px';
   },
 
   update: function() {
