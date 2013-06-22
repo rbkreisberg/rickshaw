@@ -9,6 +9,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
     this.min = args.min || 0;
     this.max = args.max || 14;
     this.step = args.step || 0.2;
+    this.orientation = args.orientation || 'vertical';
     //this.width = args.width || 200;
 
     this.build();
@@ -32,6 +33,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
         max: self.max,
         step: self.step,
         values: yDomain,
+        orientation: self.orientation,
         slide: function( event, ui ) {
 
           graph.window.yMin = ui.values[0];
