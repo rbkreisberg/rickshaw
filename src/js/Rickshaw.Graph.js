@@ -105,13 +105,14 @@ Rickshaw.Graph = function(args) {
 
 	this.discoverRange = function() {
 		var domain = this.renderer.domain();
+		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0, this.width]);
 	};
 
 	this.discoverYRange = function() {
 	var domain = this.renderer.domain();
+	if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
-
 		this.y.magnitude = d3.scale.linear()
 			.domain([domain.y[0] - domain.y[0], domain.y[1] - domain.y[0]])
 			.range([0, this.height]);
@@ -120,12 +121,14 @@ Rickshaw.Graph = function(args) {
 	this.setRange = function() {
 		var domain = this.renderer.domain();
 		domain.x = [this.window.xMin || domain.x[0], this.window.xMax || domain.x[1]];
+		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0,this.width]);
 	};
 
 	this.setYRange = function() {
 		var domain = this.renderer.domain();
 		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
+		if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
 
 		this.y.magnitude = d3.scale.linear()
