@@ -484,13 +484,14 @@ Rickshaw.Graph = function(args) {
 
 	this.discoverRange = function() {
 		var domain = this.renderer.domain();
+		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0, this.width]);
 	};
 
 	this.discoverYRange = function() {
 	var domain = this.renderer.domain();
+	if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
-
 		this.y.magnitude = d3.scale.linear()
 			.domain([domain.y[0] - domain.y[0], domain.y[1] - domain.y[0]])
 			.range([0, this.height]);
@@ -499,12 +500,14 @@ Rickshaw.Graph = function(args) {
 	this.setRange = function() {
 		var domain = this.renderer.domain();
 		domain.x = [this.window.xMin || domain.x[0], this.window.xMax || domain.x[1]];
+		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0,this.width]);
 	};
 
 	this.setYRange = function() {
 		var domain = this.renderer.domain();
 		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
+		if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
 
 		this.y.magnitude = d3.scale.linear()
@@ -1915,7 +1918,7 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 
 		}, this );
 
-
+		if (nearestPoint === undefined) return;
 		nearestPoint.active = true;
 
 		var domainX = nearestPoint.value.x;
@@ -2140,9 +2143,10 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 				],
 				slide: function( event, ui ) {
 
+					if (ui.values[0] >= ui.values[1]) { return; }
+
 					graph.window.xMin = ui.values[0];
-					graph.window.xMax = ui.values[1];
-					if (graph.window.xMin >= graph.window.xMax) { graph.window.xMax = 1.01 * graph.window.xMin;}
+					graph.window.xMax = ui.values[1];					
 					graph.update();
 
 					// if we're at an extreme, stick there
@@ -2163,8 +2167,10 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 
 		var element = this.element;
 		var graph = this.graph;
-
 		var values = $(element).slider('option', 'values');
+
+		var domain = graph.dataDomain();
+		if ( domain[0] === undefined || domain[1] === undefined ) return;
 
 		$(element).slider('option', 'min', graph.dataDomain()[0]);
 		$(element).slider('option', 'max', graph.dataDomain()[1]);
@@ -2175,7 +2181,6 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 		if (graph.window.xMax == null) {
 			values[1] = graph.dataDomain()[1];
 		}
-
 		$(element).slider('option', 'values', values);
 	}
 });
@@ -2191,6 +2196,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
     this.min = args.min || 0;
     this.max = args.max || 14;
     this.step = args.step || 0.2;
+    this.orientation = args.orientation || 'vertical';
     //this.width = args.width || 200;
 
     this.build();
@@ -2214,6 +2220,7 @@ Rickshaw.Graph.RangeSlider.Y = Rickshaw.Class.create({
         max: self.max,
         step: self.step,
         values: yDomain,
+        orientation: self.orientation,
         slide: function( event, ui ) {
 
           graph.window.yMin = ui.values[0];
