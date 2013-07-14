@@ -1156,8 +1156,20 @@ Rickshaw.Graph.Annotate = function(args) {
 	var self = this;
 
 	this.data = {};
+	this.boxColor = null;
 
 	this.elements.timeline.classList.add('rickshaw_annotation_timeline');
+
+	this.clear = function() {
+		this.elements.timeline.innerHTML='';
+		self.data = {};
+		return this;
+	};
+
+	this.color = function(colorString) {
+		this.boxColor = colorString;
+		return this;
+	};
 
 	this.add = function(time, content, end_time) {
 		self.data[time] = self.data[time] || {'boxes': []};
@@ -1187,6 +1199,7 @@ Rickshaw.Graph.Annotate = function(args) {
 			if (!annotation.element) {
 				var element = annotation.element = document.createElement('div');
 				element.classList.add('annotation');
+				if (this.boxColor) { element.style.backgroundColor = this.boxColor; }
 				this.elements.timeline.appendChild(element);
 				element.addEventListener('click', function(e) {
 					element.classList.toggle('active');
