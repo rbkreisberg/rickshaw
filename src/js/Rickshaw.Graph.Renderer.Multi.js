@@ -26,8 +26,6 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 
 	domain: function($super) {
 
-		this.graph.stackData();
-
 		var domains = [];
 
 		var groups = this._groups();

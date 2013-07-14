@@ -30,7 +30,7 @@ Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
 
 	domain: function(data) {
 
-		var stackedData = data || this.graph.stackedData || this.graph.stackData();
+		var stackedData = data || this.graph.stackedData;
 		var firstPoint = stackedData[0][0];
 
 		var xMin = firstPoint.x;
