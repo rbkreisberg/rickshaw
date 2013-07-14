@@ -433,6 +433,11 @@ Rickshaw.Graph = function(args) {
 		} );
 
 		this.setRenderer(args.renderer || 'stack', args);
+
+		this.stackedData = this.stackData();
+		this.graphDomain = this.fullDomain();
+		this.domain = this.renderer.domain();
+
 		this.discoverRange();
 	};
 
@@ -468,28 +473,28 @@ Rickshaw.Graph = function(args) {
 		}, this );
 	};
 
+	this.fullDomain = function() {
+		var xranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.x;});});
+		var yranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.y;});});
+		return {x: d3.extent(d3.merge(xranges)), y: d3.extent(d3.merge(yranges))};
+	};
+
 	this.dataDomain = function() {
-
-		// take from the first series
-		var data = this.series[0].data;
-
-		//return [ data[0].x, data.slice(-1).shift().x ];
-		return this.renderer.domain().x;
-
+		return this.graphDomain.x;
 	};
 
 	this.yDomain = function() {
-		return this.renderer.domain().y;
+		return this.graphDomain.y;
 	};
 
 	this.discoverRange = function() {
-		var domain = this.renderer.domain();
+		var domain = this.domain;
 		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0, this.width]);
 	};
 
 	this.discoverYRange = function() {
-	var domain = this.renderer.domain();
+	var domain = this.domain;
 	if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
 		this.y.magnitude = d3.scale.linear()
@@ -498,14 +503,14 @@ Rickshaw.Graph = function(args) {
 	};
 
 	this.setRange = function() {
-		var domain = this.renderer.domain();
+		var domain = this.domain;
 		domain.x = [this.window.xMin || domain.x[0], this.window.xMax || domain.x[1]];
 		if (domain.x[0] === undefined || domain.x[1] === undefined) return;
 		this.x = d3.scale.linear().domain(domain.x).range([0,this.width]);
 	};
 
 	this.setYRange = function() {
-		var domain = this.renderer.domain();
+		var domain = this.domain;
 		domain.y = [this.window.yMin || domain.y[0], this.window.yMax || domain.y[1]];
 		if (domain.y[0] === undefined || domain.y[1] === undefined) return;
 		this.y = d3.scale.linear().domain(domain.y).range([this.height, 0]);
@@ -517,7 +522,10 @@ Rickshaw.Graph = function(args) {
 
 	this.render = function() {
 
-		var stackedData = this.stackData();
+		this.graphDomain = this.fullDomain();
+		this.domain = this.renderer.domain();
+		this.stackedData = this.stackData();
+		
 		if (this.window.xMin || this.window.xMax) { this.setRange();}
 		else { this.discoverRange(); }
 
@@ -548,6 +556,8 @@ Rickshaw.Graph = function(args) {
 				}
 			} );
 		}
+
+		if (this.aggregationScale != 1) { preserve = true;}
 
 		data = preserve ? Rickshaw.clone(data) : data;
 
@@ -2293,7 +2303,7 @@ Rickshaw.Graph.Renderer = Rickshaw.Class.create( {
 
 	domain: function(data) {
 
-		var stackedData = data || this.graph.stackedData || this.graph.stackData();
+		var stackedData = data || this.graph.stackedData;
 		var firstPoint = stackedData[0][0];
 
 		var xMin = firstPoint.x;
@@ -2762,8 +2772,6 @@ Rickshaw.Graph.Renderer.Multi = Rickshaw.Class.create( Rickshaw.Graph.Renderer, 
 	},
 
 	domain: function($super) {
-
-		this.graph.stackData();
 
 		var domains = [];
 
