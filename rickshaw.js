@@ -1163,6 +1163,7 @@ Rickshaw.Graph.Annotate = function(args) {
 	this.clear = function() {
 		this.elements.timeline.innerHTML='';
 		self.data = {};
+		this.boxColor = null;
 		return this;
 	};
 
