@@ -14,6 +14,9 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 			return y === null ? y : y.toFixed(2);
 		};
 
+		this.clickCallback = d3.functor(args.click || function() {});
+		this.activePoint = null;
+
 		var element = this.element = document.createElement('div');
 		element.className = 'detail';
 
@@ -127,6 +130,7 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 
 	hide: function() {
 		this.visible = false;
+		this.activePoint = null;
 		this.element.classList.add('inactive');
 
 		if (typeof this.onHide == 'function') {
@@ -143,11 +147,20 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		}
 	},
 
+	clickHandler: function(evt) {
+		if (!this.activePoint) return;
+		var point = this.activePoint;
+		var dot = d3.select(this.element).select('.dot.active').node();
+		this.clickCallback(evt, {el: dot, data: point});
+	},
+
 	render: function(args) {
 
 		var graph = this.graph;
 		var points = args.points;
 		var point = points.filter( function(p) { return p.active } ).shift();
+
+		this.activePoint = point;
 
 		if (point.value.y === null) return;
 
@@ -206,6 +219,10 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 			}.bind(this),
 			false
 		);
+
+		this.graph.element.addEventListener(
+			'click',
+			this.clickHandler.bind(this));
 
 		this.graph.onUpdate( function() { this.update() }.bind(this) );
 
