@@ -391,6 +391,8 @@ Rickshaw.Graph = function(args) {
 		offset: 'zero',
 		min: undefined,
 		max: undefined,
+		yMin: undefined,
+		yMax: undefined,
 		preserve: false
 	};
 
@@ -475,17 +477,24 @@ Rickshaw.Graph = function(args) {
 
 	this.fullDomain = function() {
 		var xranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.x;});});
-		var yranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.y;});});
-		var xrange = d3.extent(d3.merge(xranges));
-		var yrange = d3.extent(d3.merge(yranges));
-		
-		if (xrange[0] == xrange[1]) {
+		var xrange = d3.extent(d3.merge(xranges));	
+		if (xrange[0] === xrange[1]) {
 			xrange[0] = xrange[0] / 1.1;
 			xrange[1] = xrange[1] * 1.1;
 		}
-		if (yrange[0] == yrange[1]) {
+		
+		var yranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.y;});});
+		var yrange = d3.extent(d3.merge(yranges));
+		if (yrange[0] === yrange[1]) {
 			yrange[0] = yrange[0] / 1.1;
 			yrange[1] = yrange[1] * 1.1;
+		}
+		
+		if (this.min && this.min !== 'auto') {
+			yrange[0] = +this.min;
+		}
+		if (this.max && this.max !== undefined) {
+			yrange[1] =  +this.max;
 		}
 		return {x: xrange, y: yrange};
 	};
