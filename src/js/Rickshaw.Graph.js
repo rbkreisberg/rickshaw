@@ -62,6 +62,16 @@ Rickshaw.Graph = function(args) {
 		this.discoverRange();
 	};
 
+	this.importData = function(series) {
+		this.series = series;
+		this.validateSeries(series);
+		this.series.active = function() { return self.series.filter( function(s) { return !s.disabled } ) };
+		
+		this.stackedData = this.stackData();
+		this.graphDomain = this.fullDomain();
+		this.domain = this.renderer.domain();
+	};
+	
 	this.validateSeries = function(series) {
 
 		if (!Array.isArray(series) && !(series instanceof Rickshaw.Series)) {
