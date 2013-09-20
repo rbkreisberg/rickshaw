@@ -22,3 +22,7 @@ Rickshaw.Fixtures.Number.formatBase1024KMGTP = function(y) {
     else if (abs_y === 0)           { return '' }
     else                        { return y }
 };
+
+Rickshaw.Fixtures.Number.formatPh = function(y) {
+    return y.toFixed(2);
+};

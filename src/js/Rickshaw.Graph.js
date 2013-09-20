@@ -97,7 +97,18 @@ Rickshaw.Graph = function(args) {
 	this.fullDomain = function() {
 		var xranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.x;});});
 		var yranges = this.series.active().map(function(s) { return d3.extent(s.data, function(v) { return v.y;});});
-		return {x: d3.extent(d3.merge(xranges)), y: d3.extent(d3.merge(yranges))};
+		var xrange = d3.extent(d3.merge(xranges));
+		var yrange = d3.extent(d3.merge(yranges));
+		
+		if (xrange[0] == xrange[1]) {
+			xrange[0] = xrange[0] / 1.1;
+			xrange[1] = xrange[1] * 1.1;
+		}
+		if (yrange[0] == yrange[1]) {
+			yrange[0] = yrange[0] / 1.1;
+			yrange[1] = yrange[1] * 1.1;
+		}
+		return {x: xrange, y: yrange};
 	};
 
 	this.dataDomain = function() {
