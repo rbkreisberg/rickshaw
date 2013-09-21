@@ -118,6 +118,15 @@ Rickshaw.Graph = function(args) {
 			yrange[0] = yrange[0] / 1.1;
 			yrange[1] = yrange[1] * 1.1;
 		}
+
+		if (this.min && this.min !== 'auto' && isFinite(this.min)) {
+			yrange[0] = +this.min;
+		}
+
+		if (this.max && isFinite(this.max)) {
+			yrange[1] = +this.max;
+		}
+		
 		return {x: xrange, y: yrange};
 	};
 

@@ -441,6 +441,16 @@ Rickshaw.Graph = function(args) {
 		this.discoverRange();
 	};
 
+	this.importData = function(series) {
+		this.series = series;
+		this.validateSeries(series);
+		this.series.active = function() { return self.series.filter( function(s) { return !s.disabled } ) };
+		
+		this.stackedData = this.stackData();
+		this.graphDomain = this.fullDomain();
+		this.domain = this.renderer.domain();
+	};
+	
 	this.validateSeries = function(series) {
 
 		if (!Array.isArray(series) && !(series instanceof Rickshaw.Series)) {
@@ -487,6 +497,15 @@ Rickshaw.Graph = function(args) {
 			yrange[0] = yrange[0] / 1.1;
 			yrange[1] = yrange[1] * 1.1;
 		}
+
+		if (this.min && this.min !== 'auto' && isFinite(this.min)) {
+			yrange[0] = +this.min;
+		}
+
+		if (this.max && isFinite(this.max)) {
+			yrange[1] = +this.max;
+		}
+		
 		return {x: xrange, y: yrange};
 	};
 
