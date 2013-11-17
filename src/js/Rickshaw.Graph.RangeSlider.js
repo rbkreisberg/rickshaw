@@ -54,6 +54,8 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 		var element = this.element;
 		var graph = this.graph;
 		var values = $(element).slider('option', 'values');
+		var oldMax = $(element).slider('option', 'max');
+		var oldMin = $(element).slider('option', 'min');
 
 		var domain = graph.renderer.domain().x;
 		if ( domain[0] === undefined || domain[1] === undefined ) return;
@@ -61,10 +63,10 @@ Rickshaw.Graph.RangeSlider = Rickshaw.Class.create({
 		$(element).slider('option', 'min', domain[0]);
 		$(element).slider('option', 'max', domain[1]);
 
-		if (graph.window.xMin == null) {
+		if (values[0] === oldMin || graph.window.xMin == null) {
 			values[0] = domain[0];
 		}
-		if (graph.window.xMax == null) {
+		if (values[1] === oldMax || graph.window.xMax == null) {
 			values[1] = domain[1];
 		}
 		$(element).slider('option', 'values', values);
