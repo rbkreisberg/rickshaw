@@ -23,7 +23,6 @@ Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
 				.attr('class', 'rickshaw_graph y_axis');
 
 			this.element = this.vis[0][0];
-			this.element.style.position = 'relative';
 
 			this.setSize({ width: args.width, height: args.height });
 
@@ -56,13 +55,10 @@ Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
 
 		this.vis
 			.attr('width', this.width)
-			.attr('height', this.height * (1 + this.berthRate));
+			.attr('height', this.height);
 
 		var berth = this.height * this.berthRate;
 
-		if (this.orientation == 'left') {
-			this.element.style.top = -1 * berth + 'px';
-		}
 	},
 
 	render: function() {
@@ -82,7 +78,7 @@ Rickshaw.Graph.Axis.Y = Rickshaw.Class.create( {
 
 		if (this.orientation == 'left') {
 			var berth = this.height * this.berthRate;
-			var transform = 'translate(' + this.width + ', ' + berth + ')';
+			var transform = 'translate(' + this.width + ', 0)';
 		}
 
 		if (this.element) {

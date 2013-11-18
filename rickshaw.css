@@ -77,7 +77,6 @@
 	position: relative;
 }
 .rickshaw_graph svg {
-	display: block;	
 	overflow: hidden;
 }
 
