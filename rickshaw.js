@@ -415,6 +415,7 @@ Rickshaw.Graph = function(args) {
 		this.element.classList.add('rickshaw_graph');
 		this.vis = d3.select(this.element)
 			.append("svg:svg")
+			.classed('graph',true)
 			.attr('width', this.width)
 			.attr('height', this.height);
 
@@ -1921,6 +1922,8 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		var invertX = d3.scale.linear().domain([0,graph.width]).range(graph.domain.x);
 		var domainX = invertX(eventX);
 
+		var scaleY = d3.scale.linear().domain(graph.domain.y).range([graph.height,0]);
+
 		var j = 0;
 		var points = [];
 		var nearestPoint;
@@ -1952,8 +1955,8 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 			var value = data[dataIndex];
 
 			var distance = Math.sqrt(
-				Math.pow(Math.abs(graph.x(value.x) - eventX), 2) +
-				Math.pow(Math.abs(graph.y(value.y + value.y0) - eventY), 2)
+				Math.pow(scaleX(value.x) - eventX, 2) +
+				Math.pow(scaleY(value.y + value.y0) - eventY, 2)
 			);
 
 			var xFormatter = series.xFormatter || this.xFormatter;
@@ -2090,7 +2093,8 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 
 	_addListeners: function() {
 
-		this.graph.element.addEventListener(
+		var svg = this.graph.element.querySelector('svg.graph');
+		svg.addEventListener(
 			'mousemove',
 			function(e) {
 				this.visible = true;
@@ -2099,16 +2103,16 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 			false
 		);
 
-		this.graph.element.addEventListener(
+		svg.addEventListener(
 			'click',
 			this.clickHandler.bind(this));
 
 		this.graph.onUpdate( function() { this.update() }.bind(this) );
 
-		this.graph.element.addEventListener(
+		svg.addEventListener(
 			'mouseout',
 			function(e) {
-				if (e.relatedTarget && !(e.relatedTarget.compareDocumentPosition(this.graph.element) & Node.DOCUMENT_POSITION_CONTAINS)) {
+				if (e.relatedTarget && !(e.relatedTarget.compareDocumentPosition(svg) & Node.DOCUMENT_POSITION_CONTAINS)) {
 					this.hide();
 				}
 			}.bind(this),

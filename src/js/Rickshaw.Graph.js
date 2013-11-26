@@ -36,6 +36,7 @@ Rickshaw.Graph = function(args) {
 		this.element.classList.add('rickshaw_graph');
 		this.vis = d3.select(this.element)
 			.append("svg:svg")
+			.classed('graph',true)
 			.attr('width', this.width)
 			.attr('height', this.height);
 
