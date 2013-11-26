@@ -1917,6 +1917,10 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		var eventX = e.offsetX || e.layerX;
 		var eventY = e.offsetY || e.layerY;
 
+		var scaleX = d3.scale.linear().domain(graph.domain.x).range([0,graph.width]);
+		var invertX = d3.scale.linear().domain([0,graph.width]).range(graph.domain.x);
+		var domainX = invertX(eventX);
+
 		var j = 0;
 		var points = [];
 		var nearestPoint;
@@ -1924,8 +1928,6 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		this.graph.series.active().forEach( function(series) {
 
 			var data = this.graph.stackedData[j++];
-
-			var domainX = graph.x.invert(eventX);
 
 			var domainIndexScale = d3.scale.linear()
 				.domain([data[0].x, data.slice(-1)[0].x])
@@ -1978,11 +1980,17 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		if (nearestPoint === undefined) return;
 		nearestPoint.active = true;
 
-		var domainX = nearestPoint.value.x;
+		var dX = scaleX(nearestPoint.value.x);
 		var formattedXValue = nearestPoint.formattedXValue;
 
+		if ( dX < 0 || nearestPoint.value.y === null) {
+			this.hide();
+			return;
+		}
+
+
 		this.element.innerHTML = '';
-		this.element.style.left = graph.x(domainX) + 'px';
+		this.element.style.left = dX + 'px';
 
 		this.visible && this.render( {
 			points: points,
@@ -1990,7 +1998,7 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 			mouseX: eventX,
 			mouseY: eventY,
 			formattedXValue: formattedXValue,
-			domainX: domainX
+			domainX: dX
 		} );
 	},
 
@@ -2025,16 +2033,21 @@ Rickshaw.Graph.HoverDetail = Rickshaw.Class.create({
 		var graph = this.graph;
 		var points = args.points;
 		var point = points.filter( function(p) { return p.active } ).shift();
+		var scaleX = d3.scale.linear().domain(graph.domain.x).range([0,graph.width]);
+		var xPos = scaleX(point.value.x);
 
 		this.activePoint = point;
 
-		if (point.value.y === null) return;
+		if ( point.value.y === null ) {
+			this.hide();
+			return;
+		}
 
 		var formattedXValue = point.formattedXValue;
 		var formattedYValue = point.formattedYValue;
 
 		this.element.innerHTML = '';
-		this.element.style.left = graph.x(point.value.x) + 'px';
+		this.element.style.left = xPos + 'px';
 
 		var xLabel = document.createElement('div');
 
